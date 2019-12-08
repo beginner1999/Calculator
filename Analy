@@ -1,0 +1,239 @@
+package lex;
+
+public class Analy {
+	public  String inputs;     //句子
+	public  char[] input=new char[] {};
+	public  String[] passed=new String[] {};
+	public char[] remain=new char[] {};    //剩余串
+	public  char Stack[]=new char[50];  //分析栈
+	public  char[][]tabs= {
+			                     {'>','>','<','<','<','>','<','>'},
+			                     {'>','>','<','<','<','>','<','>'},
+			                     {'>','>','>','>','<','>','<','>'},
+			                     {'>','>','>','>','<','>','<','>'},
+			                     {'<','<','<','<','<','=','<','$'},
+			                     {'>','>','>','>','$','>','$','>'},
+			                     {'>','>','>','>','$','>','$','>'},
+			                     {'<','<','<','<','<','$','<','='}
+			                    };
+	
+	public int num=0;
+	public int flag=0;
+	public Analy(String inputs,String[] pass) {
+		passed=pass;
+		input=getToken(inputs);
+		remain=getToken1(inputs);
+		num=0;
+		Stack[num]='#';
+		Stack[num+1]='\0';
+		
+	}
+	public  char[] getToken(String content) {     //输入字符串转字符数组
+		int count = 0;
+		char[] tokens = new char[content.length()];
+		for(int i = 0; i < content.length(); ++i) {
+			char ch = content.charAt(i);
+			if(ch != ' ' || ch != '\n') {
+				tokens[count++] = ch;
+			}
+		}
+		return tokens;
+	}
+	public  char[] getToken1(String content) {   //剩余字符串转字符数组
+		int count = 0;
+		char[] tokens = new char[content.length()+1];
+		for(int i = 0; i < content.length(); ++i) {
+			char ch = content.charAt(i);
+			if(ch != ' ' || ch != '\n') {
+				tokens[count++] = ch;
+			}
+		}
+		tokens[count] ='\0' ;
+		return tokens;
+	}
+	
+	
+	public String re="";
+
+	public  String analyse()   //算符分析函数
+	{
+				
+		char a,b,op,Q,op1,op2; 
+		int i,j,f,h,h1,l=0,l1,h2,l2;
+		f=input.length;  
+		for(i=0;i<=f;i++)
+		{
+			a=input[i];
+			if(i<f-1)
+			b=input[i+1];
+			else
+			b='$';
+			if(judge(input,num,a,b,i+2) == 0)    
+	          {
+	                   break;
+	          }
+			if(i==0)
+			leftString();
+			if(Stack[num]=='+'||Stack[num]=='-'||Stack[num]=='*'||Stack[num]=='/'||Stack[num]=='i'||Stack[num]=='('||Stack[num]==')'||Stack[num]=='#')
+				j=num;
+			else
+				j=num-1;
+			h=search(Stack[j]);
+		    if(a=='+'||a=='-'||a=='*'||a=='/'||a=='i'||a=='('||a==')'||a=='#')
+			{   
+			    l=search(a);	
+			}	
+			else 
+			{
+				System.out.println("第"+(i+1)+"个单词"+passed[i]+"出错！");
+				re="第"+(i+1)+"个单词"+passed[i]+"出错！";
+				break;
+			}
+			if(h==6&&l==7)
+			op='>';
+			else
+	        op=tabs[h][l];
+			if(op=='$')
+			{
+				System.out.println("第"+(i+1)+"个单词"+a+"出错！");
+				re="第"+(i+1)+"个单词"+a+"出错！";
+				return re;
+			}
+			if(op=='>')
+		    {
+		    for( ; ; )
+			{
+	             Q=Stack[j];
+				 if(Stack[j-1]=='+'||Stack[j-1]=='-'||Stack[j-1]=='*'||Stack[j-1]=='i'||Stack[j-1]=='/'||Stack[j-1]=='('||Stack[j-1]==')'||Stack[j-1]=='#')
+					 j=j-1;
+				 else
+					 j=j-2;
+				 h1=search(Stack[j]);
+				 l1=search(Q);
+				 op1=tabs[h1][l1];
+				 if(op1=='<')    //进行规约
+				 {
+					 num=j+1;
+					 i--;
+					 Stack[num]='N';
+					 int r,r1;
+					 r=Stack.length;
+					 for(r1=num+1;r1<r;r1++)
+						 Stack[r1]='\0';
+					 
+				 break;
+				 }
+				 else
+				   continue;
+			}
+		}
+			else
+			{
+				if(op=='<')  //移进
+				{
+					
+					num=num+1;
+					Stack[num]=a;
+					leftString();
+				}
+				else
+				{
+					if(op=='=')     //成功
+					{
+						h2=search(Stack[j]);
+						l2=search('#');
+						op2=tabs[h2][l2];
+						if(op2=='=')
+						{
+							flag=1;
+							break;
+						}
+						else
+						{
+							
+							num=num+1;
+							Stack[num]=a;
+							leftString();
+						}
+					}
+					else
+					{
+						System.out.println("第"+(i+1)+"个单词"+a+"出错！");
+						re="第"+(i+1)+"个单词"+a+"出错！";
+						break;
+					}
+				}
+			}
+		}
+		return re;
+		
+	}
+	public int judge(char[] s,int num,char psc,char psc1,int index) {   //初步处理
+		if(num == 0 && (psc == '+' || psc == '*'||psc == '-' ||psc == '/')) {
+			System.out.println("第1个单词"+s[0]+"出错");
+			re="第1个单词"+s[0]+"出错";
+			return 0;
+		}
+		if((psc == '+' || psc == '*'||psc == '-' || psc == '/') && (psc1  == '+' || psc1 == '*'||psc1 == '-' || psc1 == '/')) {
+		
+			System.out.println("第"+index+"个单词"+psc1+"出错");
+			re="第"+index+"个单词"+psc1+"出错";
+			return 0;
+		}
+		if(psc == '(' && psc1  != 'i') {
+			
+			System.out.println("第"+index+"个单词"+psc1+"出错");
+			re="第"+index+"个单词"+psc1+"出错";
+			return 0;
+		}
+       if(psc == ')' && psc1  == 'i') {
+			 
+			System.out.println("第"+index+"个单词"+passed[index]+"出错");
+			re="第"+index+"个单词"+passed[index]+"出错";
+			return 0;
+		}
+		if((psc == '+' || psc == '*'||psc == '-' ||psc == '/'||psc=='(')&&psc1=='#') {
+			System.out.println("第"+(s.length-1)+"个单词"+psc+"出错");
+			re="第"+(s.length-1)+"个单词"+psc+"出错";
+			return 0;
+		}
+		return 1;
+		
+	}
+	public  int search(char x) //求数组索引
+	{
+		int m=0;
+		if(x=='+')
+			m=0;
+		if(x=='-')
+			m=1;
+		if(x=='*')
+			m=2;
+		if(x=='/')
+			m=3;
+		if(x=='(')
+			m=4;
+		if(x==')')
+			m=5;
+		if(x=='i')
+			m=6;
+	    if(x=='#')
+			m=7;
+		return m;
+	}
+	public void leftString() //剩余字符串左移
+	{
+		int i,j;
+		i=remain.length;
+		for(j=0;j<i-1;j++) {
+		remain[j]=remain[j+1];
+		}
+		remain[i-1]='\0';
+	}
+	public boolean yes() {
+		if(flag==1)
+		return true;
+		else
+		return false;
+	}
+}
