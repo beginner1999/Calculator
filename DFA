@@ -1,0 +1,173 @@
+package lex;
+public class DFA {
+	private String  content;
+	private String[] status = {"A","B","C","D","E","F","G","H","I","J","K","L"};
+	private String begin;
+	private String endst;
+	
+	
+	public DFA(int start, int end) {
+		begin = status[start];
+		endst = status[end];
+	}
+	public boolean result() {
+		String status = getEndStrus(begin);
+		if (status == null) {
+			return false;
+		}if(status.equals(endst)){
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getEndStrus(String begin) {
+		String status = begin;
+		char[] tokens = getToken();
+		for (int i = 0; i < tokens.length && status != null; i++) {
+			char ch = tokens[i];
+			String nextStatus = getNextStrus(status, ch);
+			status = nextStatus;
+		}
+		return status;
+	}
+	
+	public String getNextStrus(String start, char ch) {
+		String nextStrus;
+		switch (start) {
+		case "A":
+			if(ch == '0') {
+				nextStrus = "B";
+			}
+			else if(ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7'||ch=='8'||ch=='9'){
+				nextStrus = "C";
+			}else {
+				nextStrus = null;
+			}
+			break;
+		case "B":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7') {
+				nextStrus = "F";
+			}
+			else if(ch=='x'){
+				nextStrus = "I";
+			}
+			else if(ch=='.'){
+				nextStrus = "D";
+			}
+			else {
+				nextStrus = null;
+			}
+			break;
+		case "C":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7'||ch=='8'||ch=='9') {
+				nextStrus = "C";
+			}
+			else if(ch == '.'){
+				nextStrus = "D";
+			}else {
+				nextStrus = null;
+			}
+			break;
+		case "D":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7'||ch=='8'||ch=='9') {
+				nextStrus = "E";
+			}
+			else {
+				nextStrus = null;
+			}
+			break;
+		case "E":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7'||ch=='8'||ch=='9') {
+				nextStrus = "E";
+			}
+			else {
+				nextStrus = null;
+			}
+			break;
+		case "F":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7') {
+				nextStrus = "F";
+			}
+			else if(ch=='.'){
+				nextStrus = "G";
+			}
+			else {
+				nextStrus = null;
+			}
+			break;
+		case "G":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7') {
+				nextStrus = "H";
+			}
+			else {
+				nextStrus = null;
+			}
+			break;
+		case "H":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7') {
+				nextStrus = "H";
+			}
+			else {
+				nextStrus = null;
+			}
+			break;
+		case "I":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7'||ch=='8'||ch=='9'||ch=='a'|| ch=='b'||ch=='c'||ch=='d'||ch=='e'||ch=='f') {
+				nextStrus = "J";
+			}
+			else {
+				nextStrus = null;
+			}
+			break;
+		case "J":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7'||ch=='8'||ch=='9'||ch=='a'|| ch=='b'||ch=='c'||ch=='d'||ch=='e'||ch=='f') {
+				nextStrus = "J";
+			}
+			else if(ch=='.'){
+				nextStrus = "K";
+			}
+			else {
+				nextStrus = null;
+			}
+			break;
+		case "K":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7'||ch=='8'||ch=='9'||ch=='a'|| ch=='b'||ch=='c'||ch=='d'||ch=='e'||ch=='f') {
+				nextStrus = "L";
+			}
+			else {
+				nextStrus = null;
+			}
+			break;
+		case "L":
+			if(ch=='0'||ch=='1'||ch=='2'||ch=='3'||ch=='4'||ch=='5'||ch=='6'||ch=='7'||ch=='8'||ch=='9'||ch=='a'|| ch=='b'||ch=='c'||ch=='d'||ch=='e'||ch=='f') {
+				nextStrus = "L";
+			}
+			else {
+				nextStrus = null;
+			}
+			break;
+		default:		
+			nextStrus =null;
+			break;
+		}
+		return nextStrus;
+	}
+	
+	public char[] getToken() {
+		int count = 0;
+		char[] tokens = new char[this.content.length()];
+		for(int i = 0; i < this.content.length(); ++i) {
+			char ch = this.content.charAt(i);
+			if(ch != ' ' || ch != '\n') {
+				tokens[count++] = ch;
+			}
+		}
+		return tokens;
+	}
+	
+}
