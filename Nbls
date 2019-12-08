@@ -1,0 +1,107 @@
+package lex;
+
+import java.util.ArrayList;
+
+public class Nbls {
+   public ArrayList<String> inStr;
+   public ArrayList<String> outStr;
+   public ArrayList<String> stack;
+   public  char[][]tabs= {
+           {'>','>','<','<','<','>','>'},
+           {'>','>','<','<','<','>','>'},
+           {'>','>','>','>','<','>','>'},
+           {'>','>','>','>','<','>','>'},
+           {'<','<','<','<','<','=','$'},
+           {'>','>','>','>','$','>','>'},
+           {'<','<','<','<','<','$','='}
+          };
+   public Nbls(String[] str) {
+	   this.stack = new ArrayList<>();
+	   this.inStr = new ArrayList<>();
+	   this.outStr = new ArrayList<>();
+	   for(int i=0;i<str.length;i++) {
+		   this.inStr.add(str[i]);
+	   }
+	   this.stack.add("#");
+	   this.inStr.add("#");
+   }
+   public void print() {
+	   
+	// 从左往右扫描中缀表达式
+			label1: for (String currentChar : this.inStr) {
+				// 输入串为空?
+				if (currentChar.equals("#")) {
+					// 栈为空？
+					while (true) {
+						if (this.stack.get(this.stack.size() - 1).equals("#")) {
+							break label1;
+						} else {
+							// 退栈输出
+							this.outStr.add(this.stack.get(this.stack.size() - 1));
+							this.stack.remove(this.stack.size() - 1);
+							continue;
+						}
+					}
+				} else {
+					// 运算符？
+					if (!this.isChar(currentChar)) {
+						// 输出
+						this.outStr.add(currentChar);
+						continue;
+					} else {
+						while (true) {
+							// 栈是否为空？
+							if (this.stack.get(this.stack.size() - 1).equals("#")) {
+								// 入栈
+								this.stack.add(currentChar);
+								continue label1;
+							} else {
+								// 比较当前运算符与栈顶运算符的优先级
+								if (isFirst(currentChar)) {
+									// 入栈
+									this.stack.add(currentChar);
+									continue label1;
+								} else {
+									// 当前运算符是')'
+									if (currentChar.equals(")")) {
+										while (true) {
+											// 栈顶为'('
+											if (this.stack.get(this.stack.size() - 1).equals("(")) {
+												// 退栈
+												this.stack.remove(this.stack.size() - 1);
+												continue label1;
+											} else {
+												// 栈为空？
+												if (this.stack.get(this.stack.size() - 1).equals("#")) {
+													System.out.println("ERROR");
+												} else {
+													// 退栈输出
+													this.outStr.add(this.stack.get(this.stack.size() - 1));
+													this.stack.remove(this.stack.size() - 1);
+													continue;
+												}
+											}
+										}
+									} else {
+										continue label1;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+	}
+   public boolean isChar(String currentChar) {
+	   return "+-*/()".contains(currentChar);
+   }
+   public boolean isFirst(String currentChar) {
+	   
+		String stackChar = this.stack.get(this.stack.size()-1);
+		int x = "+-*/()#".indexOf(stackChar);
+		int y = "+-*/()#".indexOf(currentChar);
+		return this.tabs[x][y]=='<';
+	}
+}
+
+  
