@@ -1,0 +1,684 @@
+package lex;
+
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Scanner;
+import java.util.Stack;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.UnsupportedLookAndFeelException;
+
+public class Calculator extends JFrame {
+	public static void main(String[] args) {
+		try {
+			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		
+		    try
+		    {
+		        org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+		    }
+		    catch(Exception e)
+		    {
+		        //TODO exception
+		    }
+		    new Calculator();
+	}
+		
+	public static char[] getToken(String content) {
+		int count = 0;
+		char[] tokens = new char[content.length()];
+		for(int i = 0; i <content.length(); ++i) {
+			char ch = content.charAt(i);
+			if(ch != ' ' || ch != '\n') {
+				tokens[count++] = ch;
+			}
+		}
+		return tokens;
+	}
+	// 构造方法
+	public Calculator() {
+		Container container = getContentPane();// 定义一个顶级容器
+		setLayout(new GridLayout(2, 1));
+		final JTextField jTextField = new JTextField();
+    	jTextField.setHorizontalAlignment(jTextField.RIGHT);
+    	jTextField.setFont(new Font("宋体",Font.BOLD,30));
+		JButton jButton0 = new JButton("0");
+		JButton jButton1 = new JButton("1");
+		JButton jButton2 = new JButton("2");
+		JButton jButton3 = new JButton("3");
+		JButton jButton4 = new JButton("4");
+		JButton jButton5 = new JButton("5");
+		JButton jButton6 = new JButton("6");
+		JButton jButton7 = new JButton("7");
+		JButton jButton8 = new JButton("8");
+		JButton jButton9 = new JButton("9");
+		JButton point = new JButton(".");
+		JButton equ = new JButton("=");
+		JButton plus = new JButton("+");
+		JButton minus = new JButton("-");
+		JButton mtp = new JButton("*");
+		JButton dvd = new JButton("/");
+		JButton x = new JButton("x");
+		JButton a = new JButton("a");
+		JButton tg = new JButton("退格");
+		JButton ql = new JButton("清除");
+		JButton b = new JButton("b");
+		JButton c= new JButton("c");
+		JButton d = new JButton("d");
+		JButton e = new JButton("e");
+		JButton f = new JButton("f");
+		JButton left = new JButton("(");
+		JButton right= new JButton(")");
+		JButton oc= new JButton("八进制");
+		JButton ox= new JButton("十六进制");
+		JButton maxh= new JButton("最大化");
+		JButton minh= new JButton("最小化");
+		JButton exit= new JButton("退出");
+		
+		JPanel jPanel = new JPanel();
+		jPanel.setLayout(new GridLayout(6, 5, 1, 1));// 3,3为水平垂直间距
+		jPanel.add(jButton7);
+		jPanel.add(jButton8);
+		jPanel.add(jButton9);
+		jPanel.add(tg);
+		jPanel.add(ql);
+		jPanel.add(jButton4);
+		jPanel.add(jButton5);
+		jPanel.add(jButton6);
+		jPanel.add(plus);
+		jPanel.add(minus);
+		jPanel.add(jButton1);
+		jPanel.add(jButton2);
+		jPanel.add(jButton3);
+		jPanel.add(mtp);
+		jPanel.add(dvd);
+		jPanel.add(a);
+		jPanel.add(b);
+		jPanel.add(c);
+		jPanel.add(left);
+		jPanel.add(right);
+		jPanel.add(d);
+		jPanel.add(e);
+		jPanel.add(f);
+		jPanel.add(maxh);
+		jPanel.add(minh);
+		jPanel.add(jButton0);
+		jPanel.add(x);
+		jPanel.add(point);
+		jPanel.add(exit);
+		jPanel.add(equ);
+		container.add(jTextField);
+		container.add(jPanel);
+		setSize(450, 600);
+		setVisible(true);
+		setTitle("计算器");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		// 计算器功能实现
+		maxh.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				setExtendedState(JFrame.MAXIMIZED_BOTH);   
+				
+			}
+		});
+		minh.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				setExtendedState(JFrame.ICONIFIED); 
+				
+			}
+		});
+		jButton0.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (jTextField.getText().equals("0")) {// 与0作比较
+					jTextField.requestFocus();// 把输入焦点放在调用这个方法的控件上
+				} else {
+					String string = jTextField.getText();
+					jTextField.setText(string + "0");
+					
+				}
+			}
+		});
+		jButton1.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "1");
+				
+			}
+		});
+		jButton2.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "2");
+				
+			}
+		});
+		jButton3.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "3");
+				
+			}
+		});
+		jButton4.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+			
+					String string = jTextField.getText();
+					jTextField.setText(string + "4");
+				
+			}
+		});
+		jButton5.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+			
+					String string = jTextField.getText();
+					jTextField.setText(string + "5");
+				
+			}
+		});
+		jButton6.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "6");
+				
+			}
+		});
+		jButton7.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "7");
+				}
+			
+		});
+		jButton8.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "8");
+				
+			}
+		});
+		jButton9.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "9");
+				
+			}
+		});
+		point.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + ".");
+				
+			}
+		});
+		plus.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "+");
+				
+			}
+		});
+		minus.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "-");
+				
+			}
+		});
+		mtp.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "*");
+				
+			}
+		});
+		dvd.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "/");
+				
+			}
+		});
+		x.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				
+					String string = jTextField.getText();
+					jTextField.setText(string + "x");
+				
+			}
+		});
+		tg.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String string = jTextField.getText();
+				int length = string.length();
+				if (length > 0)
+					string = string.substring(0, length - 1);
+				if (string.length() == 0)
+					jTextField.setText("0");
+				else
+					jTextField.setText(string);
+			}
+		});
+
+		ql.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				jTextField.setText("");
+			}
+		});
+		a.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String string = jTextField.getText();
+				jTextField.setText(string + "a");
+			}
+		});
+		b.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String string = jTextField.getText();
+				jTextField.setText(string + "b");
+			}
+		});
+		c.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String string = jTextField.getText();
+				jTextField.setText(string + "c");
+			}
+		});
+		d.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String string = jTextField.getText();
+				jTextField.setText(string + "d");
+			}
+		});
+		e.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String string = jTextField.getText();
+				jTextField.setText(string + "e");
+			}
+		});
+		f.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String string = jTextField.getText();
+				jTextField.setText(string + "f");
+			}
+		});
+		left.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				String string = jTextField.getText();
+				jTextField.setText(string + "(");
+			}
+		});
+		right.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				String string = jTextField.getText();
+				jTextField.setText(string + ")");
+			}
+		});
+		exit.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		equ.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					String word = jTextField.getText();
+					if(word.equals("")) {
+						jTextField.setText("算式不能为空！");
+					}
+					word=word.replaceAll(" ","");
+					String[] content= {};
+					String[] passed= {};
+					String[] change= {};
+					word=word.replace("(", "|(|");
+					word=word.replace(")", "|)|");
+					word=word.replace("+", "|+|");
+					word=word.replace("-", "|-|");
+					word=word.replace("*", "|*|");
+					word=word.replace("/", "|/|");
+					content=word.split("\\|");
+					passed=word.split("\\|");
+					change=word.split("\\|");
+					String strs="";
+					for(int i=0;i<content.length;i++) {
+			        DFA dfa1 = new DFA(0,1);//十进制整数
+						dfa1.setContent(content[i]);
+						DFA dfa2 = new DFA(0,2);//十进制整数
+						dfa2.setContent(content[i]);
+						DFA dfa3 = new DFA(0,4);//十进制实数
+						dfa3.setContent(content[i]);
+						DFA dfa4= new DFA(0,5);//八进制整数
+						dfa4.setContent(content[i]);
+						DFA dfa5 = new DFA(0,7);//八进制实数
+						dfa5.setContent(content[i]);
+						DFA dfa6 = new DFA(0,9);//十六进制整数
+						dfa6.setContent(content[i]);
+						DFA dfa7= new DFA(0,11);//十六进制实数
+						dfa7.setContent(content[i]);
+					   
+						if(dfa1.result()||dfa2.result()) {
+							
+							content[i]="i";
+						}
+						else if(dfa3.result()) {
+							
+							content[i]="i";
+						}
+						else if(dfa4.result()) {
+						
+							content[i]="i";
+							int j=0;
+							double counter=0;
+							char[] d5=getToken(change[i]);
+							for(int k=d5.length-1;k>=1;k--) {
+								String d=""+d5[k];
+								counter=counter+(Double.parseDouble(d)*Math.pow(8,j));
+								j++;
+							}
+							change[i]=""+counter;
+							
+						}
+						else if(dfa5.result()) {
+						
+							content[i]="i";
+							char[] d4=getToken(change[i]);
+							int q=0;
+							String ssr0="";
+							String ssr1="";
+							while(d4[q]!='.') {
+								ssr0=ssr0+d4[q];
+								q++;
+							}
+							q=q+1;
+							while(q<d4.length) {
+								ssr1=ssr1+d4[q];
+								q++;
+							}
+							int j=0;
+							int n=-1;
+							double counter=0;
+							char[] d5=getToken(ssr0);
+							System.out.println(d5);
+							char[] d6=getToken(ssr1);
+							for(int k=d5.length-1;k>=1;k--) {
+								String d=""+d5[k];
+								counter=counter+(Double.parseDouble(d)*Math.pow(8,j));
+								j++;
+							}
+							for(int m=0;m<d6.length;m++) {
+								String d=""+d6[m];
+								counter=counter+(Double.parseDouble(d)*Math.pow(8,n));
+								n--;
+							}
+							change[i]=""+counter;
+							
+							
+						}
+						else if(dfa6.result()) {
+						
+							content[i]="i";
+							int j=0;
+							double counter=0;
+							String d="";
+							char[] d5=getToken(change[i]);
+							for(int k=d5.length-1;k>=2;k--) {
+								if((d5[k]!='a')&&(d5[k]!='b')&&(d5[k]!='c')&&(d5[k]!='d')&&(d5[k]!='e')&&(d5[k]!='f'))
+								{d=""+d5[k];}
+								else if(d5[k]=='a') {
+									d="10";
+								}
+								else if(d5[k]=='b') {
+									d="11";
+								}
+								else if(d5[k]=='c') {
+									d="12";
+								}
+								else if(d5[k]=='d') {
+									d="13";
+								}
+								else if(d5[k]=='e') {
+									d="14";
+								}
+								else if(d5[k]=='f') {
+									d="15";
+								}
+								
+								counter=counter+(Double.parseDouble(d)*Math.pow(16,j));
+								j++;
+							}
+							change[i]=""+counter;
+							
+						}
+						else if(dfa7.result()) {
+							
+							content[i]="i";
+							char[] d4=getToken(change[i]);
+							int q=0;
+							String ssr0="";
+							String ssr1="";
+							while(d4[q]!='.') {
+								ssr0=ssr0+d4[q];
+								q++;
+							}
+							q=q+1;
+							while(q<d4.length) {
+								ssr1=ssr1+d4[q];
+								q++;
+							}
+							int j=0;
+							int n=-1;
+							String d="";
+							double counter=0;
+							char[] d5=getToken(ssr0);
+							System.out.println(d5);
+							char[] d6=getToken(ssr1);
+							for(int k=d5.length-1;k>=2;k--) {
+								if((d5[k]!='a')&&(d5[k]!='b')&&(d5[k]!='c')&&(d5[k]!='d')&&(d5[k]!='e')&&(d5[k]!='f'))
+								{d=""+d5[k];}
+								else if(d5[k]=='a') {
+									d="10";
+								}
+								else if(d5[k]=='b') {
+									d="11";
+								}
+								else if(d5[k]=='c') {
+									d="12";
+								}
+								else if(d5[k]=='d') {
+									d="13";
+								}
+								else if(d5[k]=='e') {
+									d="14";
+								}
+								else if(d5[k]=='f') {
+									d="15";
+								}
+								
+								counter=counter+(Double.parseDouble(d)*Math.pow(16,j));
+								j++;
+							}
+							for(int k=0;k<d6.length;k++) {
+								if((d6[k]!='a')&&(d6[k]!='b')&&(d6[k]!='c')&&(d6[k]!='d')&&(d6[k]!='e')&&(d6[k]!='f'))
+								{d=""+d6[k];}
+								else if(d6[k]=='a') {
+									d="10";
+								}
+								else if(d6[k]=='b') {
+									d="11";
+								}
+								else if(d6[k]=='c') {
+									d="12";
+								}
+								else if(d6[k]=='d') {
+									d="13";
+								}
+								else if(d6[k]=='e') {
+									d="14";
+								}
+								else if(d6[k]=='f') {
+									d="15";
+								}
+								
+								counter=counter+(Double.parseDouble(d)*Math.pow(16,n));
+								n--;
+							}
+							change[i]=""+counter;
+						}
+						else if(content[i].equals("+")||content[i].equals("-")||content[i].equals("*")||content[i].equals("/")||content[i].equals("(")||content[i].equals(")")){
+							strs=strs+content[i];
+						}
+					}
+					
+					String str="";
+					for(int i=0;i<content.length;i++) {
+						str=str+content[i];
+						
+					}
+					str=str+'#';
+					Analy a=new Analy(str,passed);
+					jTextField.setText(a.analyse());
+					if(a.yes()) {
+					Nbls nb = new Nbls(change);
+					nb.print();
+					String[] jstr=new String[change.length];
+					int x=0;
+					for (String currentChar : nb.outStr) {
+						
+						jstr[x]=currentChar;
+						x++;
+						System.out.print(currentChar);
+						
+					}
+					System.out.println();
+					Stack<Double> sta=new Stack<Double>();
+					for(int j=0;j<jstr.length;j++) {
+						if(jstr[j]!=null) {
+						if(!jstr[j].equals("")){
+						if((!jstr[j].equals("+"))&&(!jstr[j].equals("-"))&&(!jstr[j].equals("*"))&&(!jstr[j].equals("/"))) {
+							sta.push(new Double(Double.parseDouble(jstr[j])));
+						}
+						else if(jstr[j].equals("+")){
+							double s1=  sta.pop();
+						    double s2=sta.pop();
+					       double s3=s1+s2;
+					      sta.push(new Double(s3));//2
+					      
+								
+						}
+					    else if(jstr[j].equals("-"))
+						    {
+						    	 double s1=sta.pop();
+							     double s2=sta.pop();
+							     double s3=s2-s1;
+							      sta.push(new Double(s3));
+						    }
+						
+					    else if(jstr[j].equals("*"))
+						    {
+					    	 double s1=sta.pop();
+							 double s2=  sta.pop();
+							 double s3=s1*s2;
+							  sta.push(new Double(s3));
+						    }
+						
+					    else if(jstr[j].equals("/")){
+						    
+						    	
+					    	 double s1=sta.pop();
+							 double s2=  sta.pop();
+							     
+							      double s3=s2/s1;
+							      sta.push(new Double(s3));
+						  }
+
+						}
+						}
+					}
+					jTextField.setText(sta.peek().toString());
+					}
+					
+					}
+
+			
+		});
+	}
+
+}
